@@ -12,3 +12,49 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model User {
+  userid                      String        @id @default(cuid())
+  firstname                   String
+  lastname                    String 
+  email                       String        @unique
+  gender                      Gender        
+  telephone                   String        @unique  
+  username                    String        @unique
+  password                    String
+  confirm_password            String 
+  otp                         String?
+  otpExpiry                   DateTime?
+  token                       String?
+  profilePicture              String?
+  address                     String
+  country                     String
+  referall                    String?
+  role                        Role          @default(USER)
+  isActive                    Boolean       @default(false)
+  isVerified                  Boolean       @default(false)
+  accountStatus               Status        @default(ACTIVE)
+  lastLogin                   DateTime?
+  fingerprint                 String?       @unique
+  date_created                DateTime      @default(now())
+  updated_time                DateTime      @updatedAt
+}
+
+
+enum Role {
+  USER
+  MODERATOR
+  AFFILIATE
+  ADMIN
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+enum Status {
+  ACTIVE
+  SUSPENDED
+}

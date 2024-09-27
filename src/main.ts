@@ -1,11 +1,11 @@
 import * as express from 'express';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import { AppModule } from './app/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { CustomLoggerService } from './config/logger/logger.service';
+import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -51,7 +51,6 @@ async function bootstrap() {
       'Authorization',
     )
     .addTag('Server', 'Endpoint for Server functions')
-    .addTag('Auth', 'Endpoint for Auth functions')
     .build();
 
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions);
