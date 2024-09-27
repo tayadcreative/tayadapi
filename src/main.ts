@@ -51,6 +51,7 @@ async function bootstrap() {
       'Authorization',
     )
     .addTag('Server', 'Endpoint for Server functions')
+    .addTag('Downloader', 'Endpoint for downloads')
     .build();
 
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions);

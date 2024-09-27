@@ -1,26 +1,48 @@
 import { Injectable } from '@nestjs/common';
-import { CreateDownloaderDto } from './dto/create-downloader.dto';
-import { UpdateDownloaderDto } from './dto/update-downloader.dto';
+import { DownloadDto } from './dto/download.dto';
+import { YouTubeDownloaderService } from './services/youtube-downloader.service';
+import { InstagramDownloaderService } from './services/instagram-downloader.service';
+import { TwitterDownloaderService } from './services/twitter-downloader.service';
+import { FacebookDownloaderService } from './services/facebook-downloader.service';
 
 @Injectable()
 export class DownloaderService {
-  create(createDownloaderDto: CreateDownloaderDto) {
-    return 'This action adds a new downloader';
+  constructor(
+    private readonly youtubeService: YouTubeDownloaderService,
+    private readonly instagramService: InstagramDownloaderService,
+    private readonly twitterService: TwitterDownloaderService,
+    private readonly facebookService: FacebookDownloaderService,
+  ) {}
+
+  async downloadVideo(downloadDto: DownloadDto) {
+    const { url } = downloadDto;
+
+    if (this.isYouTube(url)) {
+      return this.youtubeService.downloadYouTubeVideo(url);
+    } else if (this.isInstagram(url)) {
+      return this.instagramService.downloadPost(url);
+    } else if (this.isTwitter(url)) {
+      return this.twitterService.downloadTweet(url);
+    } else if (this.isFacebook(url)) {
+      return this.facebookService.downloadFBVideo(url);
+    } else {
+      throw new Error('Unsupported URL');
+    }
   }
 
-  findAll() {
-    return `This action returns all downloader`;
+  private isYouTube(url: string): boolean {
+    return url.includes('youtube.com') || url.includes('youtu.be');
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} downloader`;
+  private isInstagram(url: string): boolean {
+    return url.includes('instagram.com');
   }
 
-  update(id: number, updateDownloaderDto: UpdateDownloaderDto) {
-    return `This action updates a #${id} downloader`;
+  private isTwitter(url: string): boolean {
+    return url.includes('twitter.com');
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} downloader`;
+  private isFacebook(url: string): boolean {
+    return url.includes('facebook.com');
   }
 }

@@ -1,34 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { DownloaderService } from './downloader.service';
-import { CreateDownloaderDto } from './dto/create-downloader.dto';
-import { UpdateDownloaderDto } from './dto/update-downloader.dto';
+import { DownloadDto } from './dto/download.dto';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+@ApiTags('Downloader')
 @Controller('downloader')
 export class DownloaderController {
   constructor(private readonly downloaderService: DownloaderService) {}
 
-  @Post()
-  create(@Body() createDownloaderDto: CreateDownloaderDto) {
-    return this.downloaderService.create(createDownloaderDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.downloaderService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.downloaderService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDownloaderDto: UpdateDownloaderDto) {
-    return this.downloaderService.update(+id, updateDownloaderDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.downloaderService.remove(+id);
+  @Post('download')
+  @ApiOperation({ summary: 'Download video from supported platforms' })
+  @ApiResponse({ status: 200, description: 'Video successfully downloaded' })
+  @ApiResponse({ status: 400, description: 'Invalid URL format' })
+  async downloadVideo(@Body() downloadDto: DownloadDto) {
+    return this.downloaderService.downloadVideo(downloadDto);
   }
 }
