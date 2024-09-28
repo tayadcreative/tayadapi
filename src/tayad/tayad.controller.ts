@@ -1,34 +1,46 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { TayadService } from './tayad.service';
-import { CreateTayadDto } from './dto/create-tayad.dto';
-import { UpdateTayadDto } from './dto/update-tayad.dto';
+import { Controller, Post, Param, Put, Body } from '@nestjs/common';
+import { YoutubeService } from './tayad.service';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { VideoDownloadDto } from './dto/tayad.dto';
 
-@Controller('tayad')
-export class TayadController {
-  constructor(private readonly tayadService: TayadService) {}
+@ApiTags('YouTube API')
+@Controller('/api/youtube')
+export class YoutubeApiController {
+  constructor(private readonly youtubeService: YoutubeService) {}
 
-  @Post()
-  create(@Body() createTayadDto: CreateTayadDto) {
-    return this.tayadService.create(createTayadDto);
+  @Post('video/:videoId')
+  @ApiResponse({ status: 200, description: 'Video data retrieved' })
+  async getVideo(@Param('videoId') videoId: string) {
+    try {
+      const videoData = await this.youtubeService.getVideo(videoId);
+      return { success: true, data: videoData };
+    } catch (error) {
+      console.error(error);
+      return { success: false, message: 'Error retrieving video data' };
+    }
   }
 
-  @Get()
-  findAll() {
-    return this.tayadService.findAll();
+  @Post('playlist/:playlistId')
+  @ApiResponse({ status: 200, description: 'Playlist data retrieved' })
+  async getPlaylist(@Param('playlistId') playlistId: string) {
+    try {
+      const playlistData = await this.youtubeService.getPlaylist(playlistId);
+      return { success: true, data: playlistData };
+    } catch (error) {
+      console.error(error);
+      return { success: false, message: 'Error retrieving playlist data' };
+    }
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tayadService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTayadDto: UpdateTayadDto) {
-    return this.tayadService.update(+id, updateTayadDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tayadService.remove(+id);
+  @Put('video/download')
+  @ApiResponse({ status: 200, description: 'Video downloaded successfully' })
+  async downloadVideo(@Body() videoData: VideoDownloadDto) {
+    try {
+      const result = await this.youtubeService.downloadVideo(videoData);
+      return result;
+    } catch (error) {
+      console.error(error);
+      return { success: false, message: 'Error downloading video' };
+    }
   }
 }

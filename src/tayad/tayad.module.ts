@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { TayadService } from './tayad.service';
-import { TayadController } from './tayad.controller';
-
+import { YoutubeService } from './tayad.service';
+import { YoutubeApiController } from './tayad.controller';
+//import { SocialDownloader } from 'src/helpers';
 @Module({
-  controllers: [TayadController],
-  providers: [TayadService],
+  controllers: [YoutubeApiController],
+  providers: [YoutubeService],
 })
 export class TayadModule {}

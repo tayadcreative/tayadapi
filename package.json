@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@distube/yt-dlp": "^2.0.1",
     "@nestjs/axios": "^3.0.3",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.3",
@@ -44,8 +45,11 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "swagger-ui-express": "^5.0.1",
+    "uuid": "^10.0.0",
     "winston": "^3.14.2",
     "winston-daily-rotate-file": "^5.0.0",
+    "youtube-dl-exec": "^3.0.9",
+    "yt-dlp-exec": "^1.0.2",
     "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
